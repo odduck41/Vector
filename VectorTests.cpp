@@ -237,17 +237,6 @@ TEST(VectorPopBackTest, PopBack) {
 // emplace_back
 // ============================================================
 
-TEST(VectorEmplaceBackTest, EmplaceBack) {
-    Vector<std::string> v;
-
-    std::string value = "hello";
-
-    v.emplace_back(std::move(value));
-
-    EXPECT_EQ(v.size(), 1);
-    EXPECT_EQ(v[0], "hello");
-}
-
 
 // ============================================================
 // front / back

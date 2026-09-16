@@ -22,7 +22,7 @@ class Vector {
     void push_back(const T&);
     void pop_back();
 
-    void emplace_back(T&&);
+    // void emplace_back(T&&);
 
     T& operator[](const std::size_t&);
     const T& operator[](const std::size_t&) const;
@@ -44,6 +44,7 @@ class Vector {
 
     [[nodiscard]] bool empty() const;
 
+    void clear();
     void resize(const std::size_t&);
     void reserve(const std::size_t&);
 
@@ -100,7 +101,7 @@ class Vector {
 /* TODO:
  * push_back +
  * pop_back +
- * emplace_back +
+ * emplace_back -
  * operator[] +
  * at +
  * size() +

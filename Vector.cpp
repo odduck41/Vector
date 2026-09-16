@@ -6,7 +6,7 @@
 
 template<class T>
 Vector<T>::Vector(const std::size_t& sz, const T& val) :
-data_(new T[sz + 1]), size_(sz), capacity_(sz) {
+data_(new T[sz]), size_(sz), capacity_(sz) {
     for (std::size_t _ = 0; _ < size_; ++_) {
         data_[_] = val;
     }
@@ -14,7 +14,7 @@ data_(new T[sz + 1]), size_(sz), capacity_(sz) {
 
 template<class T>
 Vector<T>::Vector(const std::size_t & sz) :
-data_(new T[sz + 1]), size_(sz), capacity_(sz) {}
+data_(new T[sz]), size_(sz), capacity_(sz) {}
 
 template<class T>
 Vector<T>::Vector(const std::initializer_list<T> & list) :
@@ -73,7 +73,7 @@ Vector<T> & Vector<T>::operator=(Vector && other) noexcept {
 template<class T>
 Vector<T> & Vector<T>::operator=(const std::initializer_list<T>& list) {
     this->size_ = list.size();
-    this->capacity_ = list.size() + 1;
+    this->capacity_ = list.size();
     delete[] this->data_;
     this->data_ = new T[this->capacity_];
     std::size_t ind = 0;
@@ -104,19 +104,21 @@ void Vector<T>::push_back(const T & val) {
 
 template<class T>
 void Vector<T>::pop_back() {
-    --size_;
-}
-
-template<class T>
-void Vector<T>::emplace_back(T && val) {
-    if (size_ + 1 >= capacity_) {
-        capacity_ *= 2;
-        realloc(capacity_);
+    if (size_ > 0) {
+        --size_;
     }
-
-    std::swap(data_[size_], val);
-    ++size_;
 }
+
+// template<class T>
+// void Vector<T>::emplace_back(T && val) {
+//     if (size_ + 1 >= capacity_) {
+//         capacity_ *= 2;
+//         realloc(capacity_);
+//     }
+//
+//     std::swap(data_[size_], val);
+//     ++size_;
+// }
 
 template<class T>
 T & Vector<T>::operator[](const std::size_t & index) {
@@ -190,18 +192,29 @@ bool Vector<T>::empty() const {
 }
 
 template<class T>
+void Vector<T>::clear() {
+    delete[] data_;
+    capacity_ = 1;
+    size_ = 0;
+    data_ = nullptr;
+}
+
+template<class T>
 void Vector<T>::resize(const std::size_t & sz) {
-    size_ = sz;
-    if (size_ >= capacity_) {
-        capacity_ = size_;
+    if (sz >= capacity_) {
+        capacity_ = sz;
         realloc(capacity_);
     }
+
+    size_ = sz;
 }
 
 template<class T>
 void Vector<T>::reserve(const std::size_t & cap) {
-    capacity_ = cap;
-    realloc(capacity_);
+    if (cap > capacity_) {
+        capacity_ = cap;
+        realloc(capacity_);
+    }
 }
 
 
