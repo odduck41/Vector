@@ -10,13 +10,15 @@ class Vector {
     std::size_t capacity_;
   public:
     explicit Vector(const std::size_t&, const T&);
+    explicit Vector(const std::size_t&);
+    Vector(const std::initializer_list<T>&);
     Vector(const Vector&);
     Vector(Vector&&) noexcept;
 
     Vector& operator=(const Vector&);
     Vector& operator=(Vector&&) noexcept;
 
-    Vector& operator=(std::initializer_list<T>);
+    Vector& operator=(const std::initializer_list<T>&);
 
     ~Vector();
 };
