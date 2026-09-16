@@ -16,7 +16,7 @@ TEST(VectorConstructorTest, SizeAndValue) {
     Vector<int> v(5, 42);
 
     EXPECT_EQ(v.size(), 5);
-    EXPECT_EQ(v.capacity(), 6);
+    EXPECT_EQ(v.capacity(), 5);
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], 42);
@@ -27,7 +27,7 @@ TEST(VectorConstructorTest, SizeOnly) {
     Vector<int> v(5);
 
     EXPECT_EQ(v.size(), 5);
-    EXPECT_EQ(v.capacity(), 6);
+    EXPECT_EQ(v.capacity(), 5);
 }
 
 TEST(VectorConstructorTest, InitializerList) {

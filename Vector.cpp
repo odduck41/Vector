@@ -6,7 +6,7 @@
 
 template<class T>
 Vector<T>::Vector(const std::size_t& sz, const T& val) :
-data_(new T[sz + 1]), size_(sz), capacity_(sz + 1) {
+data_(new T[sz + 1]), size_(sz), capacity_(sz) {
     for (std::size_t _ = 0; _ < size_; ++_) {
         data_[_] = val;
     }
@@ -14,11 +14,11 @@ data_(new T[sz + 1]), size_(sz), capacity_(sz + 1) {
 
 template<class T>
 Vector<T>::Vector(const std::size_t & sz) :
-data_(new T[sz + 1]), size_(sz), capacity_(sz + 1) {}
+data_(new T[sz + 1]), size_(sz), capacity_(sz) {}
 
 template<class T>
 Vector<T>::Vector(const std::initializer_list<T> & list) :
-data_(new T[list.size()]), size_(list.size()), capacity_(list.size() + 1) {
+data_(new T[list.size()]), size_(list.size()), capacity_(list.size()) {
     std::size_t ind = 0;
     for (auto& _: list) {
         data_[ind] = _;
@@ -37,7 +37,7 @@ size_(other.size_), capacity_(other.capacity_) {
 
 template<class T>
 Vector<T>::Vector(Vector && other) noexcept :
-data_(nullptr), size_(0), capacity_(0) {
+data_(nullptr) {
     std::swap(this->size_, other.size_);
     std::swap(this->capacity_, other.capacity_);
     std::swap(this->data_, other.data_);
@@ -93,12 +93,13 @@ Vector<T>::~Vector() {
 
 template<class T>
 void Vector<T>::push_back(const T & val) {
-    ++size_;
     if (size_ + 1 >= capacity_) {
         capacity_ *= 2;
         realloc(capacity_);
     }
-    data_[size_ - 1] = val;
+    data_[size_] = val;
+
+    ++size_;
 }
 
 template<class T>
@@ -108,13 +109,13 @@ void Vector<T>::pop_back() {
 
 template<class T>
 void Vector<T>::emplace_back(T && val) {
-    ++size_;
     if (size_ + 1 >= capacity_) {
         capacity_ *= 2;
         realloc(capacity_);
     }
 
-    std::swap(data_[size_ - 1], val);
+    std::swap(data_[size_], val);
+    ++size_;
 }
 
 template<class T>
@@ -191,7 +192,7 @@ bool Vector<T>::empty() const {
 template<class T>
 void Vector<T>::resize(const std::size_t & sz) {
     size_ = sz;
-    if (size_ + 1 >= capacity_) {
+    if (size_ >= capacity_) {
         capacity_ = size_;
         realloc(capacity_);
     }
@@ -210,7 +211,7 @@ void Vector<T>::realloc(const std::size_t& cap) {
         delete[] data_;
         return;
     }
-    auto copy_ = new T[cap];
+    auto copy_ = new T[cap]{};
     if (data_ != nullptr) {
         for (std::size_t _ = 0; _ < this->size_; ++_) {
             copy_[_] = data_[_];
