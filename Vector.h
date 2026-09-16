@@ -5,6 +5,7 @@
 template<class T>
 class Vector {
   public:
+    Vector() = default;
     explicit Vector(const std::size_t&, const T&);
     explicit Vector(const std::size_t&);
     Vector(const std::initializer_list<T>&);
@@ -95,6 +96,7 @@ class Vector {
     iterator end() {
       return iterator(data_ + size_);
     }
+    bool operator==(const Vector &) const = default;
 /* TODO:
  * push_back +
  * pop_back +
@@ -112,9 +114,9 @@ class Vector {
  * reserve +
 */
   private:
-    T* data_;
-    std::size_t size_;
-    std::size_t capacity_;
+    T* data_{nullptr};
+    std::size_t size_{0};
+    std::size_t capacity_{1};
 
     void realloc(const std::size_t&);
 };

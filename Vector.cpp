@@ -1,4 +1,5 @@
 #include "Vector.h"
+#include <stdexcept>
 
 #ifndef vector_cpp
 #define vector_cpp
@@ -18,8 +19,10 @@ data_(new T[sz + 1]), size_(sz), capacity_(sz + 1) {}
 template<class T>
 Vector<T>::Vector(const std::initializer_list<T> & list) :
 data_(new T[list.size()]), size_(list.size()), capacity_(list.size() + 1) {
-    for (std::size_t _ = 0; _ < this->size_; ++_) {
-        data_[_] = list[_];
+    std::size_t ind = 0;
+    for (auto& _: list) {
+        data_[ind] = _;
+        ++ind;
     }
 }
 
@@ -73,8 +76,10 @@ Vector<T> & Vector<T>::operator=(const std::initializer_list<T>& list) {
     this->capacity_ = list.size() + 1;
     delete[] this->data_;
     this->data_ = new T[this->capacity_];
-    for (std::size_t _ = 0; _ < this->size_; ++_) {
-        data_[_] = list[_];
+    std::size_t ind = 0;
+    for (auto& _: list) {
+        data_[ind] = _;
+        ++ind;
     }
     return *this;
 }
@@ -125,7 +130,7 @@ const T & Vector<T>::operator[](const std::size_t & index) const {
 template<class T>
 T & Vector<T>::at(const std::size_t & index) {
     if (index >= size_) {
-        throw "List index out of range";
+        throw std::out_of_range("List index out of range");
     }
     return data_[index];
 }
@@ -133,7 +138,7 @@ T & Vector<T>::at(const std::size_t & index) {
 template<class T>
 const T & Vector<T>::at(const std::size_t & index) const {
     if (index >= size_) {
-        throw "List index out of range";
+        throw std::out_of_range("List index out of range");
     }
     return data_[index];
 }
@@ -180,7 +185,7 @@ const T * const Vector<T>::data() const {
 
 template<class T>
 bool Vector<T>::empty() const {
-    return size_;
+    return size_ == 0;
 }
 
 template<class T>
@@ -201,9 +206,15 @@ void Vector<T>::reserve(const std::size_t & cap) {
 
 template<class T>
 void Vector<T>::realloc(const std::size_t& cap) {
+    if (cap == 0) {
+        delete[] data_;
+        return;
+    }
     auto copy_ = new T[cap];
-    for (std::size_t _ = 0; _ < this->size_; ++_) {
-        copy_[_] = data_[_];
+    if (data_ != nullptr) {
+        for (std::size_t _ = 0; _ < this->size_; ++_) {
+            copy_[_] = data_[_];
+        }
     }
     delete[] data_;
     data_ = copy_;
