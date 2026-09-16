@@ -67,3 +67,14 @@ Vector<T>::~Vector() {
     size_ = 0;
     capacity_ = 0;
 }
+
+
+template<class T>
+void Vector<T>::realloc(const std::size_t& cap) {
+    auto copy_ = new T[cap];
+    for (std::size_t _ = 0; _ < this->size_; ++_) {
+        copy_[_] = array_[_];
+    }
+    delete[] array_;
+    array_ = copy_;
+}
