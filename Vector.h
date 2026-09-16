@@ -47,6 +47,54 @@ class Vector {
     void reserve(const std::size_t&);
 
 
+    struct iterator {
+      public:
+        explicit iterator(T* v_) : value_(v_) {}
+        T& operator*() {
+          return *value_;
+        }
+        iterator operator+(const std::size_t& jmp) {
+          iterator x(value_ + jmp);
+          return x;
+        }
+
+        iterator& operator++() {
+          ++value_;
+          return *this;
+        }
+
+        iterator operator++(int) {
+          iterator x(value_);
+          ++value_;
+          return x;
+        }
+
+        iterator operator-(const std::size_t& jmp) {
+            iterator x(value_ - jmp);
+            return x;
+        }
+
+        iterator& operator--() {
+            --value_;
+            return *this;
+        }
+
+        iterator operator--(int) {
+            iterator x(value_);
+            --value_;
+            return x;
+        }
+
+        bool operator==(const iterator &) const = default;
+     private:
+      T* value_{};
+    };
+    iterator begin() {
+      return iterator(data_);
+    }
+    iterator end() {
+      return iterator(data_ + size_);
+    }
 /* TODO:
  * push_back +
  * pop_back +
@@ -57,7 +105,7 @@ class Vector {
  * capacity() +
  * front +
  * data +
- * iterators
+ * iterators ?
  * empty +
  * clear +
  * resize +
@@ -71,4 +119,5 @@ class Vector {
     void realloc(const std::size_t&);
 };
 
+#include "Vector.cpp"
 #endif

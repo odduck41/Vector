@@ -1,8 +1,11 @@
 #include "Vector.h"
 
+#ifndef vector_cpp
+#define vector_cpp
+
 template<class T>
 Vector<T>::Vector(const std::size_t& sz, const T& val) :
-data_(new T[sz]), size_(sz), capacity_(sz) {
+data_(new T[sz + 1]), size_(sz), capacity_(sz + 1) {
     for (std::size_t _ = 0; _ < size_; ++_) {
         data_[_] = val;
     }
@@ -10,21 +13,20 @@ data_(new T[sz]), size_(sz), capacity_(sz) {
 
 template<class T>
 Vector<T>::Vector(const std::size_t & sz) :
-data_(new T[sz]), size_(sz), capacity_(sz) {}
+data_(new T[sz + 1]), size_(sz), capacity_(sz + 1) {}
 
 template<class T>
 Vector<T>::Vector(const std::initializer_list<T> & list) :
-data_(new T[list.size()]), size_(list.size()), capacity_(list.size()) {
+data_(new T[list.size()]), size_(list.size()), capacity_(list.size() + 1) {
     for (std::size_t _ = 0; _ < this->size_; ++_) {
         data_[_] = list[_];
     }
 }
 
 template<class T>
-Vector<T>::Vector(const Vector & other) {
-    this->capacity_ = other.capacity_;
-    this->size_ = other.size_;
-    data_ = new T[this->size_];
+Vector<T>::Vector(const Vector & other) :
+size_(other.size_), capacity_(other.capacity_) {
+    data_ = new T[this->capacity_];
     for (std::size_t _ = 0; _ < this->size_; ++_) {
         this->data_[_] = other.data_[_];
     }
@@ -40,8 +42,19 @@ data_(nullptr), size_(0), capacity_(0) {
 
 template<class T>
 Vector<T> & Vector<T>::operator=(const Vector & other) {
+    if (other == *this) {
+        return *this;
+    }
+
     delete[] data_;
-    this->Vector(other);
+    this->size_ = other.size_;
+    this->capacity_ = other.capacity_;
+
+    data_ = new T[this->capacity_];
+
+    for (std::size_t _ = 0; _ < this->size_; ++_) {
+        this->data_[_] = other.data_[_];
+    }
     return *this;
 }
 
@@ -56,8 +69,13 @@ Vector<T> & Vector<T>::operator=(Vector && other) noexcept {
 
 template<class T>
 Vector<T> & Vector<T>::operator=(const std::initializer_list<T>& list) {
+    this->size_ = list.size();
+    this->capacity_ = list.size() + 1;
     delete[] this->data_;
-    this->Vector(list);
+    this->data_ = new T[this->capacity_];
+    for (std::size_t _ = 0; _ < this->size_; ++_) {
+        data_[_] = list[_];
+    }
     return *this;
 }
 
@@ -71,7 +89,7 @@ Vector<T>::~Vector() {
 template<class T>
 void Vector<T>::push_back(const T & val) {
     ++size_;
-    if (size_ >= capacity_) {
+    if (size_ + 1 >= capacity_) {
         capacity_ *= 2;
         realloc(capacity_);
     }
@@ -86,7 +104,7 @@ void Vector<T>::pop_back() {
 template<class T>
 void Vector<T>::emplace_back(T && val) {
     ++size_;
-    if (size_ >= capacity_) {
+    if (size_ + 1 >= capacity_) {
         capacity_ *= 2;
         realloc(capacity_);
     }
@@ -168,7 +186,7 @@ bool Vector<T>::empty() const {
 template<class T>
 void Vector<T>::resize(const std::size_t & sz) {
     size_ = sz;
-    if (size_ >= capacity_) {
+    if (size_ + 1 >= capacity_) {
         capacity_ = size_;
         realloc(capacity_);
     }
@@ -190,3 +208,4 @@ void Vector<T>::realloc(const std::size_t& cap) {
     delete[] data_;
     data_ = copy_;
 }
+#endif
