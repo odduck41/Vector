@@ -35,30 +35,33 @@ class Vector {
     T& front();
     const T& front() const;
 
+    T& back();
+    const T& back() const;
+
     T* data();
     const T* const data() const;
 
-    bool empty();
+    bool empty() const;
 
     void resize(const std::size_t&);
     void reserve(const std::size_t&);
 
 
 /* TODO:
- * push_back
- * pop_back
- * emplace_back
- * operator[]
- * at
- * size()
- * capacity()
- * front
- * data
+ * push_back +
+ * pop_back +
+ * emplace_back +
+ * operator[] +
+ * at +
+ * size() +
+ * capacity() +
+ * front +
+ * data +
  * iterators
- * empty
- * clear
- * resize
- * reserve
+ * empty +
+ * clear +
+ * resize +
+ * reserve +
 */
   private:
     T* array_;

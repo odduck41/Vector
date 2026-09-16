@@ -1,4 +1,5 @@
 #include "vector.h"
+#include <exception>
 
 template<class T>
 Vector<T>::Vector(const std::size_t& sz, const T& val) :
@@ -66,6 +67,118 @@ Vector<T>::~Vector() {
     delete[] array_;
     size_ = 0;
     capacity_ = 0;
+}
+
+template<class T>
+void Vector<T>::push_back(const T & val) {
+    ++size_;
+    if (size_ >= capacity_) {
+        capacity_ *= 2;
+        realloc(capacity_);
+    }
+    array_[size_ - 1] = val;
+}
+
+template<class T>
+void Vector<T>::pop_back() {
+    --size_;
+}
+
+template<class T>
+void Vector<T>::emplace_back(T && val) {
+    ++size_;
+    if (size_ >= capacity_) {
+        capacity_ *= 2;
+        realloc(capacity_);
+    }
+
+    std::swap(array_[size_ - 1], val);
+}
+
+template<class T>
+T & Vector<T>::operator[](const std::size_t & index) {
+    return array_[index];
+}
+
+template<class T>
+const T & Vector<T>::operator[](const std::size_t & index) const {
+    return array_[index];
+}
+
+template<class T>
+T & Vector<T>::at(const std::size_t & index) {
+    if (index >= size_) {
+        throw "List index out of range";
+    }
+    return array_[index];
+}
+
+template<class T>
+const T & Vector<T>::at(const std::size_t & index) const {
+    if (index >= size_) {
+        throw "List index out of range";
+    }
+    return array_[index];
+}
+
+template<class T>
+std::size_t Vector<T>::size() const {
+    return size_;
+}
+
+template<class T>
+std::size_t Vector<T>::capacity() const {
+    return capacity_;
+}
+
+template<class T>
+T & Vector<T>::front() {
+    return array_[0];
+}
+
+template<class T>
+const T & Vector<T>::front() const {
+    return array_[0];
+}
+
+template<class T>
+T & Vector<T>::back() {
+    return array_[size_ - 1];
+}
+
+template<class T>
+const T & Vector<T>::back() const {
+    return array_[size_ - 1];
+}
+
+template<class T>
+T * Vector<T>::data() {
+    return array_;
+}
+
+template<class T>
+const T * const Vector<T>::data() const {
+    return const_cast<const T* const>(array_);
+}
+
+template<class T>
+bool Vector<T>::empty() const {
+    return size_;
+}
+
+template<class T>
+void Vector<T>::resize(const std::size_t & sz) {
+    size_ = sz;
+    if (size_ >= capacity_) {
+        capacity_ = size_;
+        realloc(capacity_);
+    }
+}
+
+template<class T>
+void Vector<T>::reserve(const std::size_t & cap) {
+    capacity_ = cap;
+    realloc(capacity_);
 }
 
 
