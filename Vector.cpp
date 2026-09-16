@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "Vector.h"
 
 template<class T>
 Vector<T>::Vector(const std::size_t& sz, const T& val) :

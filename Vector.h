@@ -29,8 +29,8 @@ class Vector {
     T& at(const std::size_t&);
     const T& at(const std::size_t&) const;
 
-    std::size_t size() const;
-    std::size_t capacity() const;
+    [[nodiscard]] std::size_t size() const;
+    [[nodiscard]] std::size_t capacity() const;
 
     T& front();
     const T& front() const;
@@ -41,7 +41,7 @@ class Vector {
     T* data();
     const T* const data() const;
 
-    bool empty() const;
+    [[nodiscard]] bool empty() const;
 
     void resize(const std::size_t&);
     void reserve(const std::size_t&);
