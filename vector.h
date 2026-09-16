@@ -64,7 +64,7 @@ class Vector {
  * reserve +
 */
   private:
-    T* array_;
+    T* data_;
     std::size_t size_;
     std::size_t capacity_;
 
