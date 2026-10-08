@@ -1,8 +1,35 @@
 #include "Vector.h"
-#include <stdexcept>
+#include <exception>
+#include <string>
+#include <utility>
 
 #ifndef vector_cpp
 #define vector_cpp
+
+class OutOfRange : std::exception {
+  public:
+    explicit OutOfRange(std::string s) : s_(std::move(s)) {}
+    [[nodiscard]] const char* what() const noexcept override { return s_.c_str(); }
+  private:
+    std::string s_;
+};
+
+class NoFront : std::exception {
+public:
+    explicit NoFront(std::string s) : s_(std::move(s)) {}
+    [[nodiscard]] const char* what() const noexcept override { return s_.c_str(); }
+private:
+    std::string s_;
+};
+
+class NoBack : std::exception {
+public:
+    explicit NoBack(std::string s) : s_(std::move(s)) {}
+    [[nodiscard]] const char* what() const noexcept override { return s_.c_str(); }
+private:
+    std::string s_;
+};
+
 
 template<class T>
 Vector<T>::Vector(const std::size_t& sz, const T& val) :
@@ -133,7 +160,7 @@ const T & Vector<T>::operator[](const std::size_t & index) const {
 template<class T>
 T & Vector<T>::at(const std::size_t & index) {
     if (index >= size_) {
-        throw std::out_of_range("List index out of range");
+        throw OutOfRange("List index out of range");
     }
     return data_[index];
 }
@@ -141,7 +168,7 @@ T & Vector<T>::at(const std::size_t & index) {
 template<class T>
 const T & Vector<T>::at(const std::size_t & index) const {
     if (index >= size_) {
-        throw std::out_of_range("List index out of range");
+        throw OutOfRange("List index out of range");
     }
     return data_[index];
 }
@@ -158,21 +185,33 @@ std::size_t Vector<T>::capacity() const {
 
 template<class T>
 T & Vector<T>::front() {
+    if (size_ == 0) {
+        throw NoFront("Vector doesn't have any elements");
+    }
     return data_[0];
 }
 
 template<class T>
 const T & Vector<T>::front() const {
+    if (size_ == 0) {
+        throw NoFront("Vector doesn't have any elements");
+    }
     return data_[0];
 }
 
 template<class T>
 T & Vector<T>::back() {
+    if (size_ == 0) {
+        throw NoBack("Vector doesn't have any elements");
+    }
     return data_[size_ - 1];
 }
 
 template<class T>
 const T & Vector<T>::back() const {
+    if (size_ == 0) {
+        throw NoBack("Vector doesn't have any elements");
+    }
     return data_[size_ - 1];
 }
 
@@ -182,7 +221,7 @@ T * Vector<T>::data() {
 }
 
 template<class T>
-const T * const Vector<T>::data() const {
+const T * Vector<T>::data() const {
     return const_cast<const T* const>(data_);
 }
 

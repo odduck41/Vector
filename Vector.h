@@ -40,7 +40,7 @@ class Vector {
     const T& back() const;
 
     T* data();
-    const T* const data() const;
+    const T* data() const;
 
     [[nodiscard]] bool empty() const;
 
