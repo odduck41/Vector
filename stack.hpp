@@ -10,11 +10,11 @@ namespace bns {
 
         Stack(const Stack& other) {
             if (other.head_ == nullptr) return;
-            this->head_ = new T(other.head_->val);
+            this->head_ = new Node(other.head_->val);
             auto this_ptr = head_;
-            auto other_ptr = other.head_;
-            while (other_ptr->next != nullptr) {
-                this_ptr->next = new T(other_ptr->val);
+            auto other_ptr = other.head_->next;
+            while (other_ptr != nullptr) {
+                this_ptr->next = new Node(other_ptr->val);
                 this_ptr = this_ptr->next;
                 other_ptr = other_ptr->next;
             }
@@ -26,8 +26,8 @@ namespace bns {
 
             this->head_ = new Node(other.head_->val);
             auto this_ptr = head_;
-            auto other_ptr = other.head_;
-            while (other_ptr->next != nullptr) {
+            auto other_ptr = other.head_->next;
+            while (other_ptr != nullptr) {
                 this_ptr->next = new Node(other_ptr->val);
                 this_ptr = this_ptr->next;
                 other_ptr = other_ptr->next;
@@ -35,19 +35,37 @@ namespace bns {
             return *this;
         }
 
-        friend std::ofstream& operator<< (std::ofstream&, Stack<T>);
+        friend std::ostream& operator<< (std::ostream& os, Stack<T> s)
+        requires Printable<T> {
+            os << std::format("Stack<{}>", type_name<T>()) << "{";
+            if (s.head_ == nullptr) {
+                os << "}";
+                return os;
+            }
+            os << "[" << s.head_->val << "]";
+            auto ptr = s.head_->next;
+            while (ptr != nullptr) {
+                os << ", " << ptr->val;
+                ptr = ptr->next;
+            }
+            os << "}";
+            return os;
+        }
 
         void push(const T& element) {
             auto ptr = new Node(element, head_);
             head_ = ptr;
         }
         T& top() {
+            if (head_ == nullptr) throw "error"; // TODO: add exception(!)
             return head_->val;
         }
         const T& top() const {
+            if (head_ == nullptr) throw "error"; // TODO: add exception(!)
             return head_->val;
         }
         void pop() {
+            if (head_ == nullptr) throw "error"; // TODO: add exception(!)
             auto ptr = head_->next;
             delete head_;
             head_ = ptr;
