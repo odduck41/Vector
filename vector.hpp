@@ -32,8 +32,24 @@ namespace bns { // bns = the best namespace
 
         friend std::ostream& operator<<(std::ostream&, const vector&);
 
-        void push_back(const T&);
-        void pop_back();
+        void push_back(const T& element) {
+            if (size_ + 1 >= capacity_) { // size + 1 < capacity
+                (++capacity_) <<= 1;
+            }
+            data_[size_] = element;
+            ++size_;
+        }
+        void pop_back() {
+            if (size_ == 0) ; // TODO: add exception(!)
+            if (size_ > 0) --size_;
+            if ((size_ + 10) * 2 <= capacity_) {
+                capacity_ /= 2;
+                auto new_data = new T[capacity_];
+                std::copy(data_, data_ + size_, new_data);
+                delete data_[];
+                data_ = new_data;
+            }
+        }
 
         T& operator[](const std::size_t&);
         const T& operator[](const std::size_t&) const;
