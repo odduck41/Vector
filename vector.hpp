@@ -40,7 +40,7 @@ namespace bns { // bns = the best namespace
             ++size_;
         }
         void pop_back() {
-            if (size_ == 0) ; // TODO: add exception(!)
+            if (size_ == 0) throw "nothing for now"; // TODO: add exception(!)
             if (size_ > 0) --size_;
             if ((size_ + size_ / 2 + 1) * 2 <= capacity_) {
                 capacity_ = size_ + size_ / 2 + 2;
@@ -51,8 +51,14 @@ namespace bns { // bns = the best namespace
             }
         }
 
-        T& operator[](const std::size_t&);
-        const T& operator[](const std::size_t&) const;
+        T& operator[](const std::size_t& ind) {
+            if (ind >= size_) throw "nothing for now"; // TODO: add exception(!)
+            return data_[ind];
+        }
+        const T& operator[](const std::size_t& ind) const {
+            if (ind >= size_) throw "nothing for now"; // TODO: add exception(!)
+            return data_[ind];
+        }
 
         [[nodiscard]] std::size_t size() const {
             return size_;
