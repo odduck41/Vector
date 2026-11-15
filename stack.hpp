@@ -24,11 +24,11 @@ namespace bns {
             if (other.head_ == nullptr) return *this;
             this->~Stack();
 
-            this->head_ = new T(other.head_->val);
+            this->head_ = new Node(other.head_->val);
             auto this_ptr = head_;
             auto other_ptr = other.head_;
             while (other_ptr->next != nullptr) {
-                this_ptr->next = new T(other_ptr->val);
+                this_ptr->next = new Node(other_ptr->val);
                 this_ptr = this_ptr->next;
                 other_ptr = other_ptr->next;
             }
@@ -37,10 +37,21 @@ namespace bns {
 
         friend std::ofstream& operator<< (std::ofstream&, Stack<T>);
 
-        void push(const T&);
-        T& top();
-        T& top() const;
-        void pop();
+        void push(const T& element) {
+            auto ptr = new Node(element, head_);
+            head_ = ptr;
+        }
+        T& top() {
+            return head_->val;
+        }
+        const T& top() const {
+            return head_->val;
+        }
+        void pop() {
+            auto ptr = head_->next;
+            delete head_;
+            head_ = ptr;
+        }
 
         ~Stack() {
             auto ptr = head_;
