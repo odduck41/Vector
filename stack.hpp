@@ -5,11 +5,11 @@
 
 namespace bns {
     template <class T>
-    class Stack {
+    class stack {
     public:
-        Stack() = default;
+        stack() = default;
 
-        Stack(const Stack& other) {
+        stack(const stack& other) {
             if (other.head_ == nullptr) return;
             this->head_ = new Node(other.head_->val);
             auto this_ptr = head_;
@@ -20,7 +20,7 @@ namespace bns {
                 other_ptr = other_ptr->next;
             }
         }
-        Stack& operator=(const Stack& other) {
+        stack& operator=(const stack& other) {
             if (this == &other) return *this;
             if (other.head_ == nullptr) return *this;
             this->~Stack();
@@ -36,9 +36,9 @@ namespace bns {
             return *this;
         }
 
-        friend std::ostream& operator<< (std::ostream& os, Stack<T> s)
+        friend std::ostream& operator<< (std::ostream& os, stack<T> s)
         requires Printable<T> {
-            os << std::format("Stack<{}>", type_name<T>()) << "{";
+            os << std::format("stack<{}>", type_name<T>()) << "{";
             if (s.head_ == nullptr) {
                 os << "}";
                 return os;
@@ -72,7 +72,7 @@ namespace bns {
             head_ = ptr;
         }
 
-        ~Stack() {
+        ~stack() {
             if (head_ == nullptr) return;
             auto ptr = head_;
             auto next = ptr->next;
