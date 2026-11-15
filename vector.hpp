@@ -9,6 +9,14 @@ namespace bns {
         {std::cout << t} -> std::same_as<std::ostream&>;
     };
 
+    template<typename T>
+    std::string_view type_name() {
+        constexpr std::string_view res = __PRETTY_FUNCTION__;
+        constexpr auto begin = res.rfind("T = ");
+        constexpr auto end = res.rfind(']');
+        return res.substr(begin + 4, end - (begin + 4));
+    }
+
     template <class T = int>
     class vector {
     public:
@@ -37,13 +45,17 @@ namespace bns {
             return *this;
         }
 
-        template<class Printable>
-        friend std::ostream& operator<<(std::ostream& os, const vector<Printable>& v) {
-            os << std::format("bns::vector<{}>", typeid(T).name()) << "{";
+        friend std::ostream& operator<<(std::ostream& os, const vector<T>& v)
+            requires Printable<T> {
+            os << std::format("bns::vector<{}>", type_name<T>()) << "{";
             for (size_t i = 0; i + 1 < v.size_; ++i) {
                 os << v[i] << ", ";
             }
-            os << v[v.size_ - 1] << "}";
+            if (v.size_ != 0) {
+                os << v[v.size_ - 1];
+            }
+            os << "}";
+
             return os;
         }
 
