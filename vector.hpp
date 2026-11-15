@@ -1,7 +1,14 @@
 #pragma once
 #include <iostream>
 
-namespace bns { // bns = the best namespace
+namespace bns {
+    // bns = the best namespace
+    template<class T>
+    concept Printable = requires(T t)
+    {
+        std::cout << t;
+    };
+
     template <class T = int>
     class vector {
     public:
@@ -30,7 +37,15 @@ namespace bns { // bns = the best namespace
             return *this;
         }
 
-        friend std::ostream& operator<<(std::ostream&, const vector&);
+        template<class Printable>
+        friend std::ostream& operator<<(std::ostream& os, const vector<Printable>& v) {
+            os << std::format("bns::vector<{}>", typeid(T).name()) << "{";
+            for (size_t i = 0; i < v.size_; ++i) {
+                os << v[i] << ", ";
+            }
+            os << "}";
+            return os;
+        }
 
         void push_back(const T& element) {
             if (size_ + 1 >= capacity_) { // size + 1 < capacity
