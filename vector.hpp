@@ -7,8 +7,29 @@ namespace bns { // bns = the best namespace
     public:
         vector() = default;
 
-        vector(const vector&);
-        vector& operator=(const vector&);
+        vector(const vector& other) : size_(other.size_), capacity_(other.capacity_) {
+            if (this->data_ == other.data_) return;
+
+            delete[] this->data_;
+            this->size_ = other.size_;
+            this->capacity_ = other.capacity_;
+            this->data_ = new T[this->capacity_];
+
+            std::copy(other.data_, other.data_ + this->size_, this->data_);
+        }
+
+        vector& operator=(const vector& other) {
+            if (this == &other) return *this;
+
+            delete[] this->data_;
+            this->size_ = other.size_;
+            this->capacity_ = other.capacity_;
+            this->data_ = new T[this->capacity_];
+
+            std::copy(other.data_, other.data_ + this->size_, this->data_);
+            return *this;
+        }
+
         friend std::ostream& operator<<(std::ostream&, const vector&);
 
         void push_back(const T&);
