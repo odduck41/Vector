@@ -42,8 +42,8 @@ namespace bns { // bns = the best namespace
         void pop_back() {
             if (size_ == 0) ; // TODO: add exception(!)
             if (size_ > 0) --size_;
-            if ((size_ + size_ / 2) * 2 <= capacity_) {
-                capacity_ /= 2;
+            if ((size_ + size_ / 2 + 1) * 2 <= capacity_) {
+                capacity_ = size_ + size_ / 2 + 2;
                 auto new_data = new T[capacity_];
                 std::copy(data_, data_ + size_, new_data);
                 delete data_[];
