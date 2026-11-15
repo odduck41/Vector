@@ -18,6 +18,15 @@ int main() {
     e.push(2);
     std::cout << e << std::endl;
     e = h;
-    std::cout << e;
+    std::cout << e << std::endl;
+    e.pop();
+    e.pop();
+    e.pop();
+    e.pop();
+    try {
+        e.pop();
+    } catch (bns::Empty& err) {
+        std::cout << err.what();
+    }
     return 0;
 }

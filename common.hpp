@@ -27,13 +27,13 @@ namespace bns {
         std::string msg_;
     };
 
-    class RangeLimit : Error {
+    class RangeLimit : public Error {
     public:
         explicit RangeLimit(const size_t& a, /* > */ const size_t& b) :
         Error(std::format("Array size {} is less than your index {}", a, b)) {};
     };
 
-    class Empty : Error {
+    class Empty : public Error {
     public:
         explicit Empty() : Error("Container is empty") {}
     };

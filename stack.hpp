@@ -73,6 +73,7 @@ namespace bns {
         }
 
         ~Stack() {
+            if (head_ == nullptr) return;
             auto ptr = head_;
             auto next = ptr->next;
             delete ptr;
