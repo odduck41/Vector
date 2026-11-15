@@ -6,7 +6,7 @@ namespace bns {
     template<class T>
     concept Printable = requires(T t)
     {
-        std::cout << t;
+        {std::cout << t} -> std::same_as<std::ostream&>;
     };
 
     template <class T = int>
