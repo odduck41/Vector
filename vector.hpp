@@ -2,7 +2,6 @@
 #include <iostream>
 
 namespace bns {
-    // bns = the best namespace
     template<class T>
     concept Printable = requires(T t)
     {
@@ -16,7 +15,9 @@ namespace bns {
         constexpr auto end = res.rfind(']');
         return res.substr(begin + 4, end - (begin + 4));
     }
+}
 
+namespace bns { // bns = the best namespace
     template <class T = int>
     class vector {
     public:
