@@ -24,11 +24,6 @@ namespace bns { // bns = the best namespace
         vector() = default;
 
         vector(const vector& other) : size_(other.size_), capacity_(other.capacity_) {
-            if (this->data_ == other.data_) return;
-
-            delete[] this->data_;
-            this->size_ = other.size_;
-            this->capacity_ = other.capacity_;
             this->data_ = new T[this->capacity_];
 
             std::copy(other.data_, other.data_ + this->size_, this->data_);
