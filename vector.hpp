@@ -15,7 +15,11 @@ namespace bns { // bns = the best namespace
         void pop_back();
 
         T& operator[](const std::size_t&);
+        const T& operator[](const std::size_t&) const;
 
+        std::size_t size() const;
     private:
+        T* data_;
+        std::size_t size_;
     };
 }
