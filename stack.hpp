@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
-#include "vector.hpp"
+
+#include "common.hpp"
 
 namespace bns {
     template <class T>
@@ -57,15 +58,15 @@ namespace bns {
             head_ = ptr;
         }
         T& top() {
-            if (head_ == nullptr) throw "error"; // TODO: add exception(!)
+            if (head_ == nullptr) throw Empty(); // DONE: add exception(!)
             return head_->val;
         }
         const T& top() const {
-            if (head_ == nullptr) throw "error"; // TODO: add exception(!)
+            if (head_ == nullptr) throw Empty(); // DONE: add exception(!)
             return head_->val;
         }
         void pop() {
-            if (head_ == nullptr) throw "error"; // TODO: add exception(!)
+            if (head_ == nullptr) throw Empty(); // DONE: add exception(!)
             auto ptr = head_->next;
             delete head_;
             head_ = ptr;

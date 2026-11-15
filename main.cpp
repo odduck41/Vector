@@ -3,6 +3,7 @@
 //
 
 #include "stack.hpp"
+#include "vector.hpp"
 
 int main() {
     bns::Stack<int> h;

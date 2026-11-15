@@ -1,21 +1,7 @@
 #pragma once
 #include <iostream>
 
-namespace bns {
-    template<class T>
-    concept Printable = requires(T t)
-    {
-        {std::cout << t} -> std::same_as<std::ostream&>;
-    };
-
-    template<typename T>
-    std::string_view type_name() {
-        constexpr std::string_view res = __PRETTY_FUNCTION__;
-        constexpr auto begin = res.rfind("T = ");
-        constexpr auto end = res.rfind(']');
-        return res.substr(begin + 4, end - (begin + 4));
-    }
-}
+#include "common.hpp"
 
 namespace bns { // bns = the best namespace
     template <class T = int>
@@ -67,7 +53,7 @@ namespace bns { // bns = the best namespace
             ++size_;
         }
         void pop_back() {
-            if (size_ == 0) throw "nothing for now"; // TODO: add exception(!)
+            if (size_ == 0) throw Empty(); // DONE: add exception(!)
             if (size_ > 0) --size_;
             if ((size_ + size_ / 2 + 1) * 2 <= capacity_) {
                 capacity_ = size_ + size_ / 2 + 2;
@@ -79,11 +65,11 @@ namespace bns { // bns = the best namespace
         }
 
         T& operator[](const std::size_t& ind) {
-            if (ind >= size_) throw "nothing for now"; // TODO: add exception(!)
+            if (ind >= size_) throw RangeLimit(size_, ind); // DONE: add exception(!)
             return data_[ind];
         }
         const T& operator[](const std::size_t& ind) const {
-            if (ind >= size_) throw "nothing for now"; // TODO: add exception(!)
+            if (ind >= size_) throw RangeLimit(size_, ind); // DONE: add exception(!)
             return data_[ind];
         }
 
