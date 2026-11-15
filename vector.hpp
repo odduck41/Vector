@@ -40,16 +40,20 @@ namespace bns {
         template<class Printable>
         friend std::ostream& operator<<(std::ostream& os, const vector<Printable>& v) {
             os << std::format("bns::vector<{}>", typeid(T).name()) << "{";
-            for (size_t i = 0; i < v.size_; ++i) {
+            for (size_t i = 0; i + 1 < v.size_; ++i) {
                 os << v[i] << ", ";
             }
-            os << "}";
+            os << v[v.size_ - 1] << "}";
             return os;
         }
 
         void push_back(const T& element) {
             if (size_ + 1 >= capacity_) { // size + 1 < capacity
                 (++capacity_) <<= 1;
+                auto new_data = new T[capacity_];
+                std::copy(data_, data_ + size_, new_data);
+                delete[] data_;
+                data_ = new_data;
             }
             data_[size_] = element;
             ++size_;
@@ -61,7 +65,7 @@ namespace bns {
                 capacity_ = size_ + size_ / 2 + 2;
                 auto new_data = new T[capacity_];
                 std::copy(data_, data_ + size_, new_data);
-                delete data_[];
+                delete[] data_;
                 data_ = new_data;
             }
         }
