@@ -8,8 +8,32 @@ namespace bns {
     public:
         Stack() = default;
 
-        Stack(const Stack& other);
-        Stack& operator=(const Stack&);
+        Stack(const Stack& other) {
+            if (other.head_ == nullptr) return;
+            this->head_ = new T(other.head_->val);
+            auto this_ptr = head_;
+            auto other_ptr = other.head_;
+            while (other_ptr->next != nullptr) {
+                this_ptr->next = new T(other_ptr->val);
+                this_ptr = this_ptr->next;
+                other_ptr = other_ptr->next;
+            }
+        }
+        Stack& operator=(const Stack& other) {
+            if (this == &other) return *this;
+            if (other.head_ == nullptr) return *this;
+            this->~Stack();
+
+            this->head_ = new T(other.head_->val);
+            auto this_ptr = head_;
+            auto other_ptr = other.head_;
+            while (other_ptr->next != nullptr) {
+                this_ptr->next = new T(other_ptr->val);
+                this_ptr = this_ptr->next;
+                other_ptr = other_ptr->next;
+            }
+            return *this;
+        }
 
         friend std::ofstream& operator<< (std::ofstream&, Stack<T>);
 
@@ -18,9 +42,21 @@ namespace bns {
         T& top() const;
         void pop();
 
-        ~Stack();
+        ~Stack() {
+            auto ptr = head_;
+            auto next = ptr->next;
+            delete ptr;
+            while (next != nullptr) {
+                ptr = next;
+                next = ptr->next;
+                delete ptr;
+            }
+        }
     private:
-        T* data_{};
-        std::size_t size_{};
+        struct Node {
+            T val{};
+            Node* next{};
+        };
+        Node* head_{};
     };
 }
